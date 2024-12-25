@@ -1,0 +1,17 @@
+{
+  "name": "Remora Gradle plugin",
+  "image": "mcr.microsoft.com/devcontainers/java:1-21-bullseye",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "none",
+      "installMaven": "true",
+      "installGradle": "true"
+    },
+    "ghcr.io/dhoeric/features/act:1": {}
+  },
+  "customizations" : {
+    "jetbrains" : {
+      "backend" : "IntelliJ"
+    }
+  }
+}
