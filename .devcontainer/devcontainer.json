@@ -7,7 +7,10 @@
       "installMaven": "true",
       "installGradle": "true"
     },
-    "ghcr.io/dhoeric/features/act:1": {}
+    "ghcr.io/dhoeric/features/act:1": {},
+    "ghcr.io/audacioustux/devcontainers/graalvm:1": {
+      "java": "23"
+    }
   },
   "customizations" : {
     "jetbrains" : {
