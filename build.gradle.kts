@@ -1,7 +1,10 @@
 plugins {
     `java-library`
     `maven-publish`
+    alias(libs.plugins.gradlePublish)
 }
+
+group = "studio.o7"
 
 repositories {
     mavenCentral()
@@ -9,8 +12,38 @@ repositories {
 }
 
 dependencies {
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+
+    implementation(libs.shadow)
+
     compileOnly(gradleApi())
     testImplementation(gradleTestKit())
 }
 
-java.toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+gradlePlugin {
+    website = "https://github.com/o7studios/remora"
+    vcsUrl = "https://github.com/o7studios/remora"
+
+    plugins.create("remora") {
+        id = "studio.o7.remora"
+        implementationClass = "studio.o7.remora.RemoraPlugin"
+        displayName = "Remora"
+        description = "o7studios helper plugin for Gradle projects."
+    }
+}
+
+publishing {
+    repositories {
+        mavenLocal()
+    }
+    publications {
+        create<MavenPublication>("pluginMaven")
+    }
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+}
