@@ -9,7 +9,7 @@
     },
     "ghcr.io/dhoeric/features/act:1": {},
     "ghcr.io/audacioustux/devcontainers/graalvm:1": {
-      "java": "23"
+      "java": "21"
     }
   },
   "customizations" : {

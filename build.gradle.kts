@@ -1,6 +1,16 @@
 plugins {
     `java-library`
+    `maven-publish`
 }
 
+repositories {
+    mavenCentral()
+    gradlePluginPortal()
+}
 
-java.toolchain.languageVersion.set(JavaLanguageVersion.of(23))
+dependencies {
+    compileOnly(gradleApi())
+    testImplementation(gradleTestKit())
+}
+
+java.toolchain.languageVersion.set(JavaLanguageVersion.of(21))
