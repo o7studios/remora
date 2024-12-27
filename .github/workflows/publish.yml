@@ -25,7 +25,8 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/settings.gradle.kts') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - run: |
+      - name: Publish
+        run: |
           [[ "${{ github.event.release.tag_name }}" =~ ^[0-9]+(\.[0-9]+)*$ ]] || exit -1
           chmod +x gradlew
           ./gradlew publishPlugins -Pversion="${{ github.event.release.tag_name }}"  -Pgradle.publish.key="${{ secrets.GRADLE_PUBLISH_KEY }}" -Pgradle.publish.secret=${{ secrets.GRADLE_PUBLISH_SECRET }}

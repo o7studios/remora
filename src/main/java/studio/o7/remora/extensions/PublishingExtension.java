@@ -13,9 +13,7 @@ public class PublishingExtension {
     public static class Publisher {
         private final PublisherType type;
 
-        private String projectName;
         private String projectUrl;
-        private String projectDescription;
         private NamedDomainObjectContainer<License> licenses;
         private NamedDomainObjectContainer<Developer> developers;
         private NamedDomainObjectContainer<GitRepository> repositories;

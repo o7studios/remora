@@ -8,6 +8,7 @@ import org.gradle.api.artifacts.dsl.DependencyHandler;
 import org.gradle.api.artifacts.dsl.RepositoryHandler;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.plugins.JavaLibraryPlugin;
+import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.plugins.PluginManager;
 import org.gradle.api.publish.maven.plugins.MavenPublishPlugin;
 import org.gradle.plugins.signing.SigningPlugin;
@@ -25,9 +26,25 @@ public class RemoraPlugin implements Plugin<Project> {
 
         RemoraExtension extension = project.getExtensions().create("remora", RemoraExtension.class);
 
+        applyNecessaryProjectConfiguration(logger, project, extension);
+        applyJavaPluginConfiguration(logger, project, extension);
+
         applyDependencies(logger, project, extension);
 
+        // todo
+        // applyPlaceholderConfiguration(logger, project, extension);
+    }
 
+    public static void applyNecessaryProjectConfiguration(@NonNull Logger logger, @NonNull Project project, @NonNull RemoraExtension extension) {
+        logger.info("Applying project `group` and `description` configuration");
+        project.setGroup(extension.getGroupId());
+        project.setDescription(extension.getDescription());
+    }
+
+    public static void applyJavaPluginConfiguration(@NonNull Logger logger, @NonNull Project project, @NonNull RemoraExtension extension) {
+        logger.info("Applying java configuration");
+        JavaPluginExtension javaExtension = project.getExtensions().getByType(JavaPluginExtension.class);
+        javaExtension.getToolchain().getLanguageVersion().set(extension.getJavaVersion());
     }
 
     public static void applyNecessaryPlugins(@NonNull Logger logger, @NonNull Project project) {
@@ -72,7 +89,10 @@ public class RemoraPlugin implements Plugin<Project> {
 
             dependencies.add(fastUtils.getScope().getConfigurationName(), id);
         }
+    }
 
+    public static void applyPlaceholderConfiguration(@NonNull Logger logger, @NonNull Project project, @NonNull RemoraExtension extension) {
+        logger.info("Applying placeholder replacements");
 
     }
 }
