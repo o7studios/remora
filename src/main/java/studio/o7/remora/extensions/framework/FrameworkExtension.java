@@ -2,6 +2,7 @@ package studio.o7.remora.extensions.framework;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.gradle.api.Action;
 import org.gradle.api.model.ObjectFactory;
 
 import javax.inject.Inject;
@@ -14,5 +15,9 @@ public class FrameworkExtension {
     @Inject
     public FrameworkExtension(ObjectFactory factory) {
         lombok = factory.newInstance(LombokExtension.class);
+    }
+
+    public void lombok(Action<? super LombokExtension> action) {
+        action.execute(this.lombok);
     }
 }

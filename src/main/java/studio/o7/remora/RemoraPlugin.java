@@ -25,7 +25,7 @@ public class RemoraPlugin implements Plugin<Project> {
         applyNecessaryPlugins(logger, project);
         applyNecessaryRepositories(logger, project);
 
-        RemoraExtension extension = setupExtension(logger, project.getExtensions());
+        RemoraExtension extension = setupExtension(logger, project);
 
         applyNecessaryProjectConfiguration(logger, project, extension);
         applyJavaPluginConfiguration(logger, project, extension);
@@ -36,9 +36,9 @@ public class RemoraPlugin implements Plugin<Project> {
         // applyPlaceholderConfiguration(logger, project, extension);
     }
 
-    public static RemoraExtension setupExtension(@NonNull Logger logger, @NonNull ExtensionContainer extensions) {
+    public static RemoraExtension setupExtension(@NonNull Logger logger, @NonNull Project project) {
         logger.info("Setting up the `remora` extension");
-        return extensions.create("remora", RemoraExtension.class);
+        return project.getExtensions().create("remora", RemoraExtension.class, project.getObjects());
     }
 
     public static void applyNecessaryProjectConfiguration(@NonNull Logger logger, @NonNull Project project, @NonNull RemoraExtension extension) {

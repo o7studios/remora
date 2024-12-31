@@ -19,6 +19,9 @@ dependencies {
 
     compileOnly(gradleApi())
     testImplementation(gradleTestKit())
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
 }
 
 gradlePlugin {
@@ -32,6 +35,10 @@ gradlePlugin {
         description = "o7studios helper plugin for Gradle projects."
         tags = listOf("maven", "o7studios", "maven-publish", "sonatype", "lombok", "fastutils")
     }
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 publishing {
