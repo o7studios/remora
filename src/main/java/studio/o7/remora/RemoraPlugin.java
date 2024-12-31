@@ -2,6 +2,9 @@ package studio.o7.remora;
 
 import com.github.jengelman.gradle.plugins.shadow.ShadowPlugin;
 import lombok.NonNull;
+import net.thebugmc.gradle.sonatypepublisher.CentralPortalExtension;
+import net.thebugmc.gradle.sonatypepublisher.PublishingType;
+import net.thebugmc.gradle.sonatypepublisher.SonatypeCentralPortalPublisherPlugin;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.dsl.DependencyHandler;
@@ -10,12 +13,15 @@ import org.gradle.api.logging.Logger;
 import org.gradle.api.plugins.JavaLibraryPlugin;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.plugins.PluginManager;
+import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.publish.maven.plugins.MavenPublishPlugin;
+import org.gradle.plugins.signing.SigningExtension;
 import org.gradle.plugins.signing.SigningPlugin;
 import studio.o7.remora.extensions.RemoraExtension;
 import studio.o7.remora.extensions.framework.FastUtilsExtension;
 import studio.o7.remora.extensions.framework.FrameworkExtension;
 import studio.o7.remora.extensions.framework.LombokExtension;
+import studio.o7.remora.extensions.publish.SonatypeMavenCentralExtension;
 
 public class RemoraPlugin implements Plugin<Project> {
 
@@ -32,6 +38,8 @@ public class RemoraPlugin implements Plugin<Project> {
         applyJavaPluginConfiguration(logger, project, extension);
 
         applyDependencies(logger, project, extension);
+
+        applyMavenPublishPluginConfiguration(logger, project, extension);
 
         // todo
         // applyPlaceholderConfiguration(logger, project, extension);
@@ -96,6 +104,33 @@ public class RemoraPlugin implements Plugin<Project> {
 
             dependencies.add(fastUtils.getScope().getConfigurationName(), id);
         }
+    }
+
+    public static void applyMavenPublishPluginConfiguration(@NonNull Logger logger, @NonNull Project project, RemoraExtension extension) {
+        SonatypeMavenCentralExtension mavenCentral = extension.getMavenCentral();
+        if (!mavenCentral.isEnabled()) return;
+
+        logger.info("Applying necessary singing configuration");
+
+        logger.info("Applying necessary plugin `sonatype-central-publisher`");
+        project.getPlugins().apply(SonatypeCentralPortalPublisherPlugin.class);
+
+        logger.info("Configuring `centralPortal` extension");
+        project.getExtensions().configure(CentralPortalExtension.class, centralPortal -> {
+            centralPortal.getUsername().set(System.getenv("SONATYPE_USERNAME"));
+            centralPortal.getPassword().set(System.getenv("SONATYPE_PASSWORD"));
+            centralPortal.getName().set(extension.getArtifactId());
+            centralPortal.getPublishingType().set(PublishingType.USER_MANAGED);
+        });
+
+        logger.info("Configuring `signing` extension");
+        project.getExtensions().configure(SigningExtension.class, signing -> {
+            signing.useInMemoryPgpKeys(
+                    System.getenv("GPG_KEY"),
+                    System.getenv("GPG_PASSPHRASE")
+            );
+            signing.sign(project.getExtensions().getByType(PublishingExtension.class).getPublications());
+        });
     }
 
     public static void applyPlaceholderConfiguration(@NonNull Logger logger, @NonNull Project project, @NonNull RemoraExtension extension) {

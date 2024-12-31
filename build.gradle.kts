@@ -16,12 +16,13 @@ dependencies {
     annotationProcessor(libs.lombok)
 
     implementation(libs.shadow)
+    implementation(libs.mavenCentralPublisher)
 
     compileOnly(gradleApi())
     testImplementation(gradleTestKit())
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
+    testImplementation(libs.junit.api)
+    testRuntimeOnly(libs.junit.engine)
 }
 
 gradlePlugin {
