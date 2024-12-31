@@ -1,19 +1,26 @@
 package studio.o7.remora.extensions;
 
-import org.gradle.api.provider.Property;
-import org.gradle.api.tasks.Optional;
+import lombok.Getter;
+import lombok.Setter;
+import org.gradle.api.model.ObjectFactory;
 import org.gradle.jvm.toolchain.JavaLanguageVersion;
+import studio.o7.remora.extensions.framework.FrameworkExtension;
 
-public interface RemoraExtension {
+@Getter
+@Setter
+public class RemoraExtension {
 
-    Property<String> getGroupId();
+    private String groupId;
 
-    Property<String> getArtifactId();
+    private String artifactId;
 
-    @Optional
-    Property<String> getDescription();
+    private String description;
 
-    @Optional
-    Property<JavaLanguageVersion> getJavaVersion();
+    private JavaLanguageVersion javaVersion = JavaLanguageVersion.of(23);
 
+    private FrameworkExtension framework;
+
+    public RemoraExtension(ObjectFactory factory) {
+        this.framework = factory.newInstance(FrameworkExtension.class);
+    }
 }

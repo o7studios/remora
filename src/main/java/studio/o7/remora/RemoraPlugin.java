@@ -14,8 +14,6 @@ import org.gradle.api.plugins.PluginManager;
 import org.gradle.api.provider.Property;
 import org.gradle.api.publish.maven.plugins.MavenPublishPlugin;
 import org.gradle.plugins.signing.SigningPlugin;
-import studio.o7.remora.extensions.DefaultRemoraExtension;
-import studio.o7.remora.extensions.FrameworkExtension;
 import studio.o7.remora.extensions.RemoraExtension;
 
 public class RemoraPlugin implements Plugin<Project> {
@@ -40,17 +38,13 @@ public class RemoraPlugin implements Plugin<Project> {
 
     public static RemoraExtension setupExtension(@NonNull Logger logger, @NonNull ExtensionContainer extensions) {
         logger.info("Setting up the `remora` extension");
-        return extensions.create("remora", DefaultRemoraExtension.class);
+        return extensions.create("remora", RemoraExtension.class);
     }
 
     public static void applyNecessaryProjectConfiguration(@NonNull Logger logger, @NonNull Project project, @NonNull RemoraExtension extension) {
         logger.info("Applying project `group` and `description` configuration");
-        project.setGroup(extension.getGroupId().get());
-
-        Property<String> description = extension.getDescription();
-        if (description.isPresent()) {
-            project.setDescription(description.get());
-        }
+        project.setGroup(extension.getGroupId());
+        project.setDescription(extension.getDescription());
     }
 
     public static void applyJavaPluginConfiguration(@NonNull Logger logger, @NonNull Project project, @NonNull RemoraExtension extension) {
@@ -81,6 +75,7 @@ public class RemoraPlugin implements Plugin<Project> {
     public static void applyDependencies(@NonNull Logger logger, @NonNull Project project, @NonNull RemoraExtension extension) {
         DependencyHandler dependencies = project.getDependencies();
 
+        /*
         FrameworkExtension framework = null;
 
         logger.info("Adding dependency `lombok`");
@@ -98,6 +93,7 @@ public class RemoraPlugin implements Plugin<Project> {
 
             dependencies.add(fastUtils.getScope().getConfigurationName(), id);
         }
+         */
     }
 
     public static void applyPlaceholderConfiguration(@NonNull Logger logger, @NonNull Project project, @NonNull RemoraExtension extension) {
