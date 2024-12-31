@@ -7,11 +7,14 @@ import org.gradle.api.Project;
 import org.gradle.api.artifacts.dsl.DependencyHandler;
 import org.gradle.api.artifacts.dsl.RepositoryHandler;
 import org.gradle.api.logging.Logger;
+import org.gradle.api.plugins.ExtensionContainer;
 import org.gradle.api.plugins.JavaLibraryPlugin;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.plugins.PluginManager;
+import org.gradle.api.provider.Property;
 import org.gradle.api.publish.maven.plugins.MavenPublishPlugin;
 import org.gradle.plugins.signing.SigningPlugin;
+import studio.o7.remora.extensions.DefaultRemoraExtension;
 import studio.o7.remora.extensions.FrameworkExtension;
 import studio.o7.remora.extensions.RemoraExtension;
 
@@ -24,21 +27,30 @@ public class RemoraPlugin implements Plugin<Project> {
         applyNecessaryPlugins(logger, project);
         applyNecessaryRepositories(logger, project);
 
-        RemoraExtension extension = project.getExtensions().create("remora", RemoraExtension.class);
+        RemoraExtension extension = setupExtension(logger, project.getExtensions());
 
         applyNecessaryProjectConfiguration(logger, project, extension);
         applyJavaPluginConfiguration(logger, project, extension);
 
-        applyDependencies(logger, project, extension);
+        //applyDependencies(logger, project, extension);
 
         // todo
         // applyPlaceholderConfiguration(logger, project, extension);
     }
 
+    public static RemoraExtension setupExtension(@NonNull Logger logger, @NonNull ExtensionContainer extensions) {
+        logger.info("Setting up the `remora` extension");
+        return extensions.create("remora", DefaultRemoraExtension.class);
+    }
+
     public static void applyNecessaryProjectConfiguration(@NonNull Logger logger, @NonNull Project project, @NonNull RemoraExtension extension) {
         logger.info("Applying project `group` and `description` configuration");
-        project.setGroup(extension.getGroupId());
-        project.setDescription(extension.getDescription());
+        project.setGroup(extension.getGroupId().get());
+
+        Property<String> description = extension.getDescription();
+        if (description.isPresent()) {
+            project.setDescription(description.get());
+        }
     }
 
     public static void applyJavaPluginConfiguration(@NonNull Logger logger, @NonNull Project project, @NonNull RemoraExtension extension) {
@@ -69,23 +81,20 @@ public class RemoraPlugin implements Plugin<Project> {
     public static void applyDependencies(@NonNull Logger logger, @NonNull Project project, @NonNull RemoraExtension extension) {
         DependencyHandler dependencies = project.getDependencies();
 
-        FrameworkExtension framework = extension.getFramework();
+        FrameworkExtension framework = null;
 
-        FrameworkExtension.Lombok lombok = framework.getLombok();
-        if (lombok.isEnabled()) {
-            logger.info("Adding dependency `lombok`");
+        logger.info("Adding dependency `lombok`");
 
-            String id = "org.projectlombok:lombok:" + lombok.getVersion();
+        String lombokId = "org.projectlombok:lombok:1.18.36";
 
-            dependencies.add("compileOnly", id);
-            dependencies.add("annotationProcessor", id);
-        }
+        dependencies.add("compileOnly", lombokId);
+        dependencies.add("annotationProcessor", lombokId);
 
         FrameworkExtension.FastUtils fastUtils = framework.getFastUtils();
         if (fastUtils.isEnabled()) {
             logger.info("Adding dependency `fastUtils`");
 
-            String id = "it.unimi.dsi:fastutil:" + lombok.getVersion();
+            String id = "it.unimi.dsi:fastutil:" + fastUtils.getVersion();
 
             dependencies.add(fastUtils.getScope().getConfigurationName(), id);
         }

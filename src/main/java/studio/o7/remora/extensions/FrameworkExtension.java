@@ -7,15 +7,7 @@ import studio.o7.remora.enums.Scope;
 @Data
 public class FrameworkExtension {
     @Optional
-    private Lombok lombok = new Lombok();
-    @Optional
     private FastUtils fastUtils = new FastUtils();
-
-    @Data
-    public static class Lombok {
-        private boolean enabled = true;
-        private String version = "1.18.36";
-    }
 
     @Data
     public static class FastUtils {

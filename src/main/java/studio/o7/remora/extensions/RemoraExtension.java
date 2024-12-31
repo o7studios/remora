@@ -1,35 +1,19 @@
 package studio.o7.remora.extensions;
 
-import lombok.Data;
+import org.gradle.api.provider.Property;
+import org.gradle.api.tasks.Optional;
 import org.gradle.jvm.toolchain.JavaLanguageVersion;
 
-@Data
-public class RemoraExtension {
-    /**
-     * Project group id. Set as gradle group and publishing groupId.
-     */
-    private String groupId;
-    /**
-     * Project artifact id. Set as publishing artifactId.
-     */
-    private String artifactId;
-    /**
-     * Project description. Set as publishing description.
-     */
-    private String description;
+public interface RemoraExtension {
 
-    /**
-     * Java language version.
-     */
-    private JavaLanguageVersion javaVersion = JavaLanguageVersion.of(23);
+    Property<String> getGroupId();
 
-    /**
-     * Configuration of included frameworks.
-     */
-    private FrameworkExtension framework = new FrameworkExtension();
+    Property<String> getArtifactId();
 
-    /**
-     * Configuration of publishing strategies.
-     */
-    private PublishingExtension publishing = new PublishingExtension();
+    @Optional
+    Property<String> getDescription();
+
+    @Optional
+    Property<JavaLanguageVersion> getJavaVersion();
+
 }
