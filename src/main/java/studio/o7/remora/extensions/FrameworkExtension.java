@@ -7,9 +7,9 @@ import studio.o7.remora.enums.Scope;
 @Data
 public class FrameworkExtension {
     @Optional
-    private final Lombok lombok = new Lombok();
+    private Lombok lombok = new Lombok();
     @Optional
-    private final FastUtils fastUtils = new FastUtils();
+    private FastUtils fastUtils = new FastUtils();
 
     @Data
     public static class Lombok {

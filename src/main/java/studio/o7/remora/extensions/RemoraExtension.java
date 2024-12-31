@@ -26,10 +26,10 @@ public class RemoraExtension {
     /**
      * Configuration of included frameworks.
      */
-    private final FrameworkExtension framework = new FrameworkExtension();
+    private FrameworkExtension framework = new FrameworkExtension();
 
     /**
      * Configuration of publishing strategies.
      */
-    private final PublishingExtension publishing = new PublishingExtension();
+    private PublishingExtension publishing = new PublishingExtension();
 }
