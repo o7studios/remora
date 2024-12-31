@@ -7,14 +7,15 @@ import org.gradle.api.Project;
 import org.gradle.api.artifacts.dsl.DependencyHandler;
 import org.gradle.api.artifacts.dsl.RepositoryHandler;
 import org.gradle.api.logging.Logger;
-import org.gradle.api.plugins.ExtensionContainer;
 import org.gradle.api.plugins.JavaLibraryPlugin;
 import org.gradle.api.plugins.JavaPluginExtension;
 import org.gradle.api.plugins.PluginManager;
-import org.gradle.api.provider.Property;
 import org.gradle.api.publish.maven.plugins.MavenPublishPlugin;
 import org.gradle.plugins.signing.SigningPlugin;
 import studio.o7.remora.extensions.RemoraExtension;
+import studio.o7.remora.extensions.framework.FastUtilsExtension;
+import studio.o7.remora.extensions.framework.FrameworkExtension;
+import studio.o7.remora.extensions.framework.LombokExtension;
 
 public class RemoraPlugin implements Plugin<Project> {
 
@@ -30,7 +31,7 @@ public class RemoraPlugin implements Plugin<Project> {
         applyNecessaryProjectConfiguration(logger, project, extension);
         applyJavaPluginConfiguration(logger, project, extension);
 
-        //applyDependencies(logger, project, extension);
+        applyDependencies(logger, project, extension);
 
         // todo
         // applyPlaceholderConfiguration(logger, project, extension);
@@ -75,17 +76,19 @@ public class RemoraPlugin implements Plugin<Project> {
     public static void applyDependencies(@NonNull Logger logger, @NonNull Project project, @NonNull RemoraExtension extension) {
         DependencyHandler dependencies = project.getDependencies();
 
-        /*
-        FrameworkExtension framework = null;
+        FrameworkExtension framework = extension.getFramework();
 
-        logger.info("Adding dependency `lombok`");
+        LombokExtension lombok = framework.getLombok();
+        if (lombok.isEnabled()) {
+            logger.info("Adding dependency `lombok`");
 
-        String lombokId = "org.projectlombok:lombok:1.18.36";
+            String id = "org.projectlombok:lombok:" + lombok.getVersion();
 
-        dependencies.add("compileOnly", lombokId);
-        dependencies.add("annotationProcessor", lombokId);
+            dependencies.add("compileOnly", id);
+            dependencies.add("annotationProcessor", id);
+        }
 
-        FrameworkExtension.FastUtils fastUtils = framework.getFastUtils();
+        FastUtilsExtension fastUtils = framework.getFastUtils();
         if (fastUtils.isEnabled()) {
             logger.info("Adding dependency `fastUtils`");
 
@@ -93,7 +96,6 @@ public class RemoraPlugin implements Plugin<Project> {
 
             dependencies.add(fastUtils.getScope().getConfigurationName(), id);
         }
-         */
     }
 
     public static void applyPlaceholderConfiguration(@NonNull Logger logger, @NonNull Project project, @NonNull RemoraExtension extension) {
