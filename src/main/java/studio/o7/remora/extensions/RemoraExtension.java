@@ -6,6 +6,8 @@ import org.gradle.api.model.ObjectFactory;
 import org.gradle.jvm.toolchain.JavaLanguageVersion;
 import studio.o7.remora.extensions.framework.FrameworkExtension;
 
+import javax.inject.Inject;
+
 @Getter
 @Setter
 public class RemoraExtension {
@@ -20,6 +22,7 @@ public class RemoraExtension {
 
     private FrameworkExtension framework;
 
+    @Inject
     public RemoraExtension(ObjectFactory factory) {
         this.framework = factory.newInstance(FrameworkExtension.class);
     }
