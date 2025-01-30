@@ -11,7 +11,7 @@ pluginManagement {
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            version("gradlePublish", "1.3.0")
+            version("gradlePublish", "1.3.1")
             version("lombok", "1.18.36")
             version("shadow", "8.3.5")
             version("mavenCentralPublisher", "1.2.4")
