@@ -1,20 +1,21 @@
 {
   "name": "Remora Gradle plugin",
-  "image": "mcr.microsoft.com/devcontainers/java:1-21-bullseye",
-  "features": {
-    "ghcr.io/devcontainers/features/java:1": {
-      "version": "none",
-      "installMaven": "true",
-      "installGradle": "true"
-    },
-    "ghcr.io/dhoeric/features/act:1": {},
-    "ghcr.io/audacioustux/devcontainers/graalvm:1": {
-      "java": "21"
-    }
-  },
+  "image": "ubuntu:latest",
   "customizations" : {
     "jetbrains" : {
       "backend" : "IntelliJ"
     }
-  }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/git" : {},
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "21.0.7",
+      "installGradle": "true"
+    }
+  },
+  "runArgs": [
+    "--add-host=host.docker.internal:host-gateway"
+  ],
+  "remoteUser": "ubuntu"
 }
