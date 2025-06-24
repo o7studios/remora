@@ -13,7 +13,7 @@ dependencyResolutionManagement {
         create("libs") {
             version("gradlePublish", "1.3.0")
             version("lombok", "1.18.36")
-            version("shadow", "8.3.5")
+            version("shadow", "8.3.7")
             version("mavenCentralPublisher", "1.2.4")
 
             version("junit", "5.8.1")
