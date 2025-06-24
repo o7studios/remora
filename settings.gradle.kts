@@ -16,7 +16,7 @@ dependencyResolutionManagement {
             version("shadow", "8.3.5")
             version("mavenCentralPublisher", "1.2.4")
 
-            version("junit", "5.8.1")
+            version("junit", "5.13.2")
 
             library("lombok", "org.projectlombok", "lombok").versionRef("lombok")
             library("shadow", "com.gradleup.shadow", "shadow-gradle-plugin").versionRef("shadow")
