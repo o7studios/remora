@@ -16,7 +16,7 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.36")
     annotationProcessor("org.projectlombok:lombok:1.18.36")
 
-    implementation("com.gradleup.shadow:shadow-gradle-plugin:8.3.5")
+    implementation("com.gradleup.shadow:shadow-gradle-plugin:8.3.7")
     implementation("net.thebugmc.gradle.sonatype-central-portal-publisher:net.thebugmc.gradle.sonatype-central-portal-publisher.gradle.plugin:1.2.4")
     implementation("org.cthing.build-constants:org.cthing.build-constants.gradle.plugin:2.0.0")
 
