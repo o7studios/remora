@@ -8,7 +8,7 @@ import org.gradle.api.tasks.Optional;
 public interface InformationExtension {
 
     @Optional
-    Property<String> url();
+    Property<String> getUrl();
 
     void licenses(Action<? super MavenPomLicenseSpec> action);
 

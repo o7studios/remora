@@ -77,8 +77,8 @@ public class RemoraPlugin implements Plugin<Project> {
             proj.getExtensions().configure(CentralPortalExtension.class, centralPortal -> {
                 centralPortal.getName().set(project.getRootProject().getName() + "-" + proj.getName());
                 centralPortal.pom(pom -> {
-                    if (information.url().isPresent())
-                        pom.getUrl().set(information.url());
+                    if (information.getUrl().isPresent())
+                        pom.getUrl().set(information.getUrl());
                     information.configurePom(pom);
                 });
             });
@@ -102,8 +102,8 @@ public class RemoraPlugin implements Plugin<Project> {
             var information = project.getExtensions().getByType(InformationExtension.class);
             var additionalConstants = task.getAdditionalConstants();
 
-            if (information.url().isPresent())
-                additionalConstants.put("PROJECT_URL", information.url());
+            if (information.getUrl().isPresent())
+                additionalConstants.put("PROJECT_URL", information.getUrl());
         });
     }
 
@@ -116,8 +116,8 @@ public class RemoraPlugin implements Plugin<Project> {
 
         var extensions = project.getExtensions();
         var extension = setupExtension(logger, extensions);
-        if (!extension.url().isPresent())
-            extension.url().set("https://github.com/XXX/YYY");
+        if (!extension.getUrl().isPresent())
+            extension.getUrl().set("https://github.com/XXX/YYY");
 
         applyDependencies(logger, project);
         applyMavenPublishPluginConfiguration(logger, project);
