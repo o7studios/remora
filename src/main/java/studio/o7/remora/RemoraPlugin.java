@@ -15,6 +15,7 @@ import org.gradle.api.logging.Logger;
 import org.gradle.api.plugins.ExtensionContainer;
 import org.gradle.api.plugins.JavaLibraryPlugin;
 import org.gradle.api.publish.PublishingExtension;
+import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.plugins.signing.SigningExtension;
 import studio.o7.remora.extensions.DefaultInformationExtension;
 import studio.o7.remora.extensions.InformationExtension;
@@ -111,6 +112,10 @@ public class RemoraPlugin implements Plugin<Project> {
 
             if (information.getUrl().isPresent())
                 additionalConstants.put("PROJECT_URL", information.getUrl());
+        });
+
+        project.getTasks().named("sourcesJar", Jar.class, jar -> {
+            jar.dependsOn("generateBuildConstants");
         });
     }
 
