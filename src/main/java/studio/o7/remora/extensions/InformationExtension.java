@@ -10,6 +10,9 @@ public interface InformationExtension {
     @Optional
     Property<String> getUrl();
 
+    @Optional
+    Property<String> getDescription();
+
     void licenses(Action<? super MavenPomLicenseSpec> action);
 
     void developers(Action<? super MavenPomDeveloperSpec> action);

@@ -79,6 +79,8 @@ public class RemoraPlugin implements Plugin<Project> {
                 centralPortal.pom(pom -> {
                     if (information.getUrl().isPresent())
                         pom.getUrl().set(information.getUrl());
+                    if (information.getDescription().isPresent())
+                        pom.getDescription().set(information.getDescription());
                     information.configurePom(pom);
                 });
             });
