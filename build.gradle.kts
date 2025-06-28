@@ -1,10 +1,11 @@
 plugins {
     `java-library`
     `maven-publish`
-    alias(libs.plugins.gradlePublish)
+    id("com.gradle.plugin-publish") version "1.3.0"
 }
 
 group = "studio.o7"
+version = "0.0.0"
 
 repositories {
     mavenCentral()
@@ -12,17 +13,24 @@ repositories {
 }
 
 dependencies {
-    compileOnly(libs.lombok)
-    annotationProcessor(libs.lombok)
+    compileOnly("org.projectlombok:lombok:1.18.36")
+    annotationProcessor("org.projectlombok:lombok:1.18.36")
 
-    implementation(libs.shadow)
-    implementation(libs.mavenCentralPublisher)
+    implementation("com.gradleup.shadow:shadow-gradle-plugin:8.3.5")
+    implementation("net.thebugmc.gradle.sonatype-central-portal-publisher:net.thebugmc.gradle.sonatype-central-portal-publisher.gradle.plugin:1.2.4")
+    implementation("org.cthing.build-constants:org.cthing.build-constants.gradle.plugin:2.0.0")
 
     compileOnly(gradleApi())
     testImplementation(gradleTestKit())
 
-    testImplementation(libs.junit.api)
-    testRuntimeOnly(libs.junit.engine)
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.13.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.13.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.13.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.13.1")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.12.1")
+
+    testImplementation("org.assertj:assertj-core:3.27.3")
+    testImplementation("org.cthing:assertj-gradle:1.0.0")
 }
 
 gradlePlugin {
