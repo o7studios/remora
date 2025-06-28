@@ -5,7 +5,6 @@ plugins {
 }
 
 group = "studio.o7"
-version = "0.0.0"
 
 repositories {
     mavenCentral()
