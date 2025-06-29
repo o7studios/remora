@@ -29,7 +29,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.12.1")
 
     testImplementation("org.assertj:assertj-core:3.27.3")
-    testImplementation("org.cthing:assertj-gradle:1.0.0")
+    testImplementation("org.cthing:assertj-gradle:3.0.0")
 }
 
 gradlePlugin {
