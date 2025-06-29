@@ -73,22 +73,20 @@ public class RemoraPlugin implements Plugin<Project> {
             centralPortal.getPublishingType().set(PublishingType.USER_MANAGED);
         });
 
-        project.afterEvaluate(proj -> {
-            var information = (DefaultInformationExtension) proj.getExtensions().getByType(InformationExtension.class);
-            proj.getExtensions().configure(CentralPortalExtension.class, centralPortal -> {
-                var rootName = project.getRootProject().getName();
-                var projectName = proj.getName();
-                if (rootName.equals(projectName))
-                    centralPortal.getName().set(rootName);
-                else
-                    centralPortal.getName().set(rootName + "-" + projectName);
-                centralPortal.pom(pom -> {
-                    if (information.getUrl().isPresent())
-                        pom.getUrl().set(information.getUrl());
-                    if (information.getDescription().isPresent())
-                        pom.getDescription().set(information.getDescription());
-                    information.configurePom(pom);
-                });
+        var information = (DefaultInformationExtension) project.getExtensions().getByType(InformationExtension.class);
+        project.getExtensions().configure(CentralPortalExtension.class, centralPortal -> {
+            var rootName = project.getRootProject().getName();
+            var projectName = project.getName();
+            if (rootName.equals(projectName))
+                centralPortal.getName().set(rootName);
+            else
+                centralPortal.getName().set(rootName + "-" + projectName);
+            centralPortal.pom(pom -> {
+                if (information.getUrl().isPresent())
+                    pom.getUrl().set(information.getUrl());
+                if (information.getDescription().isPresent())
+                    pom.getDescription().set(information.getDescription());
+                information.configurePom(pom);
             });
         });
 
