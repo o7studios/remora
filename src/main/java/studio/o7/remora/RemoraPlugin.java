@@ -82,8 +82,9 @@ public class RemoraPlugin implements Plugin<Project> {
                     pom.getUrl().set(information.getUrl());
                 if (information.getDescription().isPresent())
                     pom.getDescription().set(information.getDescription());
+                if (information.getArtifactId().isPresent())
+                    pom.getName().set(information.getArtifactId());
                 information.configurePom(pom);
-                pom.getName().set(information.getArtifactId().get());
             });
         });
 
