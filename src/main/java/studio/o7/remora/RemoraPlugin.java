@@ -3,6 +3,7 @@ package studio.o7.remora;
 import com.github.jengelman.gradle.plugins.shadow.ShadowPlugin;
 import lombok.NonNull;
 import net.thebugmc.gradle.sonatypepublisher.CentralPortalExtension;
+import net.thebugmc.gradle.sonatypepublisher.PublishToCentralPortal;
 import net.thebugmc.gradle.sonatypepublisher.PublishingType;
 import net.thebugmc.gradle.sonatypepublisher.SonatypeCentralPortalPublisherPlugin;
 import org.cthing.gradle.plugins.buildconstants.BuildConstantsPlugin;
@@ -76,8 +77,9 @@ public class RemoraPlugin implements Plugin<Project> {
         var information = (DefaultInformationExtension) project.getExtensions().getByType(InformationExtension.class);
         project.getExtensions().configure(CentralPortalExtension.class, centralPortal -> {
             var artifactId = information.getArtifactId();
-            if (!artifactId.isPresent()) throw new IllegalStateException("artifactId in extension `information` not found");
-            centralPortal.getName().set(artifactId.get());
+            if (artifactId.isPresent()) {
+                centralPortal.getName().set(artifactId.get());
+            }
             centralPortal.pom(pom -> {
                 if (information.getUrl().isPresent())
                     pom.getUrl().set(information.getUrl());
