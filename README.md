@@ -1,3 +1,4 @@
+<img width="1024" height="241" alt="remora" src="https://github.com/user-attachments/assets/7a38185d-6ece-44c0-adf2-326a3e2f503b" />
 
 # Remora - o7studios Gradle helper plugin
 
