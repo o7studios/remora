@@ -76,8 +76,7 @@ public class RemoraPlugin implements Plugin<Project> {
 
         var information = (DefaultInformationExtension) project.getExtensions().getByType(InformationExtension.class);
         project.getExtensions().configure(CentralPortalExtension.class, centralPortal -> {
-            if (information.getArtifactId().isPresent())
-                centralPortal.getName().set(information.getArtifactId());
+            centralPortal.getName().set(information.getArtifactId());
             centralPortal.pom(pom -> {
                 if (information.getUrl().isPresent())
                     pom.getUrl().set(information.getUrl());
