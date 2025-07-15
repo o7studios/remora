@@ -8,6 +8,9 @@ import org.gradle.api.tasks.Optional;
 public interface InformationExtension {
 
     @Optional
+    Property<String> getArtifactId();
+
+    @Optional
     Property<String> getUrl();
 
     @Optional

@@ -75,12 +75,9 @@ public class RemoraPlugin implements Plugin<Project> {
 
         var information = (DefaultInformationExtension) project.getExtensions().getByType(InformationExtension.class);
         project.getExtensions().configure(CentralPortalExtension.class, centralPortal -> {
-            var rootName = project.getRootProject().getName();
-            var projectName = project.getName();
-            if (rootName.equals(projectName))
-                centralPortal.getName().set(rootName);
-            else
-                centralPortal.getName().set(rootName + "-" + projectName);
+            var artifactId = information.getArtifactId();
+            if (!artifactId.isPresent()) throw new IllegalStateException("artifactId in extension `information` not found");
+            centralPortal.getName().set(artifactId.get());
             centralPortal.pom(pom -> {
                 if (information.getUrl().isPresent())
                     pom.getUrl().set(information.getUrl());

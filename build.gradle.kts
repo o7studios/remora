@@ -40,7 +40,7 @@ gradlePlugin {
         id = "studio.o7.remora"
         implementationClass = "studio.o7.remora.RemoraPlugin"
         displayName = "Remora"
-        description = "o7studios helper plugin for Gradle projects."
+        description = "o7studios helper plugin for Gradle projects"
         tags = listOf("maven", "o7studios", "maven-publish", "sonatype", "lombok", "fastutils")
     }
 }
