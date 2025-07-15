@@ -1,25 +1,33 @@
 <img width="1024" height="241" alt="remora" src="https://github.com/user-attachments/assets/7a38185d-6ece-44c0-adf2-326a3e2f503b" />
 
-# Remora - o7studios Gradle helper plugin
+# Remora
 
-Remora is a Gradle plugin made for o7studios Gradle projects. It includes
-automatic shipping of libraries like *lombok*, publishing to Sonatype repositories
-and compiler configurations.
+**o7studios helper plugin for Gradle projects**
 
-## Configuration
+- Adds BuildConstants, Lombok & MavenCentral-Publishing
+- Example configuration [here](https://github.com/o7studios/agones-java-sdk/blob/main/build.gradle.kts)
 
-Configure your Gradle module by doing the following:
+## Development
 
-```kotlin
-// build.gradle.kts
+Full development setup available as [Development Container](https://containers.dev/).
+Please use it for being able to tell "It works on my machine".
 
-plugins {
-    id("studio.o7.remora")
-}
+**Docker is required to be installed on your machine!**
 
-remora {
-    groupId = "studio.o7"
-    artifactId = "example-project"
-}
-```
+### IntelliJ IDEA
 
+- Open IntelliJ (Welcome screen)
+- Navigate to `Remote Development` - `Dev Containers`
+- Press `New Dev Container`
+- Select `From VCS Project`
+- Select and connect with `Docker`
+- Select `IntelliJ IDEA`
+- Enter `Git Repository`: `https://github.com/o7studios/cheetah`
+- Select `Detection for devcontainer.json file` `Automatic`
+- Press `Build Container and Continue`
+
+### Development Container Issues
+
+If you encounter an issue with setting up a development container, please
+try to rebuild it first before opening a GitHub Issue. It's not uncommon
+that some issues may fix themselves after a fresh container rebuild.
