@@ -1,9 +1,9 @@
 package studio.o7.remora;
 
 import com.github.jengelman.gradle.plugins.shadow.ShadowPlugin;
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar;
 import lombok.NonNull;
 import net.thebugmc.gradle.sonatypepublisher.CentralPortalExtension;
-import net.thebugmc.gradle.sonatypepublisher.PublishToCentralPortal;
 import net.thebugmc.gradle.sonatypepublisher.PublishingType;
 import net.thebugmc.gradle.sonatypepublisher.SonatypeCentralPortalPublisherPlugin;
 import org.cthing.gradle.plugins.buildconstants.BuildConstantsPlugin;
@@ -16,13 +16,11 @@ import org.gradle.api.logging.Logger;
 import org.gradle.api.plugins.ExtensionContainer;
 import org.gradle.api.plugins.JavaLibraryPlugin;
 import org.gradle.api.publish.PublishingExtension;
-import org.gradle.api.tasks.SourceSetContainer;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.plugins.signing.SigningExtension;
 import studio.o7.remora.extensions.DefaultInformationExtension;
 import studio.o7.remora.extensions.InformationExtension;
 
-import java.io.File;
 import java.net.URI;
 
 public class RemoraPlugin implements Plugin<Project> {
@@ -118,6 +116,14 @@ public class RemoraPlugin implements Plugin<Project> {
         });
     }
 
+    public static void applyShadowJarConfiguration(@NonNull Logger logger, @NonNull Project project) {
+        logger.info("Configuring task `shadowJar`");
+
+        var task = project.getTasks().withType(ShadowJar.class);
+
+        task.configureEach(ShadowJar::mergeServiceFiles);
+    }
+
     @Override
     public void apply(Project project) {
         var logger = project.getLogger();
@@ -132,6 +138,7 @@ public class RemoraPlugin implements Plugin<Project> {
 
         applyDependencies(logger, project);
         applyMavenPublishPluginConfiguration(logger, project);
+        applyShadowJarConfiguration(logger, project);
 
         applyTaskConfiguration(logger, project);
     }
