@@ -21,6 +21,7 @@ import org.gradle.plugins.signing.SigningExtension;
 import studio.o7.remora.extensions.DefaultInformationExtension;
 import studio.o7.remora.extensions.InformationExtension;
 
+import java.io.File;
 import java.net.URI;
 
 public class RemoraPlugin implements Plugin<Project> {
@@ -103,8 +104,9 @@ public class RemoraPlugin implements Plugin<Project> {
         project.getTasks().withType(BuildConstantsTask.class).configureEach(task -> {
             task.getClassname().set(project.getGroup() + ".BuildConstants");
 
-            task.getOutputDirectory().set(project.getLayout().getBuildDirectory()
-                    + "/generated/sources/buildConstants/java/main");
+            var outputDir = new File(project.getLayout().getBuildDirectory() + "/generated/sources/buildConstants/java/main");
+
+            task.getOutputDirectory().set(outputDir);
 
             var information = project.getExtensions().getByType(InformationExtension.class);
             var additionalConstants = task.getAdditionalConstants();
