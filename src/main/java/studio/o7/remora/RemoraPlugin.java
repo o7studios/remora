@@ -103,6 +103,9 @@ public class RemoraPlugin implements Plugin<Project> {
         project.getTasks().withType(BuildConstantsTask.class).configureEach(task -> {
             task.getClassname().set(project.getGroup() + ".BuildConstants");
 
+            task.getOutputDirectory().set(project.getLayout().getBuildDirectory()
+                    + "/generated/sources/buildConstants/java/main");
+
             var information = project.getExtensions().getByType(InformationExtension.class);
             var additionalConstants = task.getAdditionalConstants();
 
