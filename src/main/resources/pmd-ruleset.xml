@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Custom ruleset"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+    <description>
+        o7studios remora PMD ruleset
+    </description>
+
+    <rule ref="category/java/errorprone.xml"/>
+    <rule ref="category/java/performance.xml"/>
+    <rule ref="category/java/security.xml"/>
+
+    <rule ref="category/java/errorprone.xml/UnconditionalIfStatement">
+        <priority>5</priority>
+        <properties>
+            <property name="violationSuppressRegex" value=".*"/>
+        </properties>
+    </rule>
+
+    <rule ref="category/java/errorprone.xml/AvoidDuplicateLiterals">
+        <priority>5</priority>
+        <properties>
+            <property name="violationSuppressRegex" value=".*"/>
+        </properties>
+    </rule>
+
+    <exclude-pattern>.*Test\.java</exclude-pattern>
+</ruleset>

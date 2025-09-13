@@ -15,9 +15,12 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.38")
     annotationProcessor("org.projectlombok:lombok:1.18.38")
 
+    implementation("org.yaml:snakeyaml:2.5")
+
     implementation("com.gradleup.shadow:shadow-gradle-plugin:8.3.8")
     implementation("net.thebugmc.gradle.sonatype-central-portal-publisher:net.thebugmc.gradle.sonatype-central-portal-publisher.gradle.plugin:1.2.4")
     implementation("org.cthing.build-constants:org.cthing.build-constants.gradle.plugin:2.0.0")
+    implementation("com.github.spotbugs:com.github.spotbugs.gradle.plugin:6.2.6")
 
     compileOnly(gradleApi())
     testImplementation(gradleTestKit())
@@ -61,5 +64,5 @@ publishing {
 java {
     withSourcesJar()
     withJavadocJar()
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(23))
 }

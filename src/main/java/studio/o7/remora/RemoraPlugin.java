@@ -1,13 +1,16 @@
 package studio.o7.remora;
 
 import com.github.jengelman.gradle.plugins.shadow.ShadowPlugin;
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar;
+import com.github.spotbugs.snom.Confidence;
+import com.github.spotbugs.snom.Effort;
+import com.github.spotbugs.snom.SpotBugsExtension;
+import com.github.spotbugs.snom.SpotBugsPlugin;
+import com.github.spotbugs.snom.SpotBugsTask;
 import lombok.NonNull;
 import net.thebugmc.gradle.sonatypepublisher.CentralPortalExtension;
 import net.thebugmc.gradle.sonatypepublisher.PublishingType;
 import net.thebugmc.gradle.sonatypepublisher.SonatypeCentralPortalPublisherPlugin;
 import org.cthing.gradle.plugins.buildconstants.BuildConstantsPlugin;
-import org.cthing.gradle.plugins.buildconstants.BuildConstantsTask;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.dsl.DependencyHandler;
@@ -15,15 +18,25 @@ import org.gradle.api.artifacts.dsl.RepositoryHandler;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.plugins.ExtensionContainer;
 import org.gradle.api.plugins.JavaLibraryPlugin;
+import org.gradle.api.plugins.quality.CheckstyleExtension;
+import org.gradle.api.plugins.quality.CheckstylePlugin;
+import org.gradle.api.plugins.quality.PmdExtension;
+import org.gradle.api.plugins.quality.PmdPlugin;
 import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.plugins.signing.SigningExtension;
+import org.jetbrains.annotations.NotNull;
 import studio.o7.remora.extensions.DefaultInformationExtension;
 import studio.o7.remora.extensions.InformationExtension;
+import studio.o7.remora.plugin.PaperPlugins;
+import studio.o7.remora.plugins.RemoraPlugins;
+import studio.o7.remora.utils.ConfigUtils;
 
 import java.net.URI;
+import java.time.Instant;
+import java.util.Map;
 
-public class RemoraPlugin implements Plugin<Project> {
+public class RemoraPlugin implements Plugin<@NotNull Project> {
 
     public static InformationExtension setupExtension(@NonNull Logger logger, @NonNull ExtensionContainer extensions) throws IllegalArgumentException {
         logger.info("Setting up the `information` extension");
@@ -31,13 +44,16 @@ public class RemoraPlugin implements Plugin<Project> {
     }
 
     public static void applyNecessaryPlugins(@NonNull Logger logger, @NonNull Project project) {
-        logger.info("Applying necessary plugins `java-library`, `shadow`, `build-constants`, and `sonatype-central-publisher`");
+        logger.info("Applying necessary plugins `java-library`, `shadow`, `build-constants`, `checkstyle`, `spotbugs`, `pmd`, and `sonatype-central-publisher`");
 
         var pluginManager = project.getPluginManager();
 
         pluginManager.apply(JavaLibraryPlugin.class);
         pluginManager.apply(ShadowPlugin.class);
         pluginManager.apply(BuildConstantsPlugin.class);
+        pluginManager.apply(CheckstylePlugin.class);
+        pluginManager.apply(SpotBugsPlugin.class);
+        pluginManager.apply(PmdPlugin.class);
         pluginManager.apply(SonatypeCentralPortalPublisherPlugin.class);
     }
 
@@ -61,7 +77,7 @@ public class RemoraPlugin implements Plugin<Project> {
         DependencyHandler dependencies = project.getDependencies();
 
         logger.info("Adding dependency `lombok`");
-        String lombokId = "org.projectlombok:lombok:1.18.36";
+        String lombokId = "org.projectlombok:lombok:1.18.38";
         dependencies.add("compileOnly", lombokId);
         dependencies.add("annotationProcessor", lombokId);
     }
@@ -98,30 +114,41 @@ public class RemoraPlugin implements Plugin<Project> {
         });
     }
 
-    public static void applyTaskConfiguration(@NonNull Logger logger, @NonNull Project project) {
-        logger.info("Configuring task `generateBuildConstants`");
+    public static void applyCheckstyle(@NonNull Logger logger, @NonNull Project project) {
+        project.getExtensions().configure(CheckstyleExtension.class, checkstyle -> {
+            logger.info("Configuring extension `checkstyle`");
+            checkstyle.setToolVersion("10.20.0");
+            checkstyle.setIgnoreFailures(false);
 
-        project.getTasks().withType(BuildConstantsTask.class).configureEach(task -> {
-            task.getClassname().set(project.getGroup() + ".BuildConstants");
-
-            var information = project.getExtensions().getByType(InformationExtension.class);
-            var additionalConstants = task.getAdditionalConstants();
-
-            if (information.getUrl().isPresent())
-                additionalConstants.put("PROJECT_URL", information.getUrl());
-        });
-
-        project.getTasks().named("sourcesJar", Jar.class, jar -> {
-            jar.dependsOn("generateBuildConstants");
+            checkstyle.setConfigFile(ConfigUtils.getConfig(project, "checkstyle.xml"));
         });
     }
 
-    public static void applyShadowJarConfiguration(@NonNull Logger logger, @NonNull Project project) {
-        logger.info("Configuring task `shadowJar`");
+    public static void applyPmd(@NonNull Logger logger, @NonNull Project project) {
+        project.getExtensions().configure(PmdExtension.class, pmd -> {
+            logger.info("Configuring extension `pmd`");
+            pmd.setToolVersion("7.9.0");
+            pmd.setIgnoreFailures(false);
 
-        var task = project.getTasks().withType(ShadowJar.class);
+            pmd.setConsoleOutput(true);
 
-        task.configureEach(ShadowJar::mergeServiceFiles);
+            pmd.ruleSetFiles(ConfigUtils.getConfig(project, "pmd-ruleset.xml"));
+        });
+    }
+
+    public static void applySpotBugs(@NonNull Logger logger, @NonNull Project project) {
+        project.getExtensions().configure(SpotBugsExtension.class, spotBugs -> {
+            logger.info("Configuring extension `spotBugs`");
+            spotBugs.getToolVersion().set("4.9.0");
+            spotBugs.getEffort().set(Effort.MAX);
+            spotBugs.getReportLevel().set(Confidence.MEDIUM);
+        });
+
+        project.getTasks().withType(SpotBugsTask.class).configureEach(task -> {
+            logger.info("Configuring task `spotBugs`");
+            task.setIgnoreFailures(false);
+            task.getExcludeFilter().set(ConfigUtils.getConfig(project, "findbugs-exclude.xml"));
+        });
     }
 
     @Override
@@ -136,10 +163,28 @@ public class RemoraPlugin implements Plugin<Project> {
         if (!extension.getUrl().isPresent())
             extension.getUrl().set("https://github.com/XXX/YYY");
 
+        PaperPlugins.setupExtension(logger, extensions);
+        project.afterEvaluate(p -> PaperPlugins.configureProject(logger, p));
+
         applyDependencies(logger, project);
         applyMavenPublishPluginConfiguration(logger, project);
-        applyShadowJarConfiguration(logger, project);
+        RemoraPlugins.applyShadowJar(logger, project);
 
-        applyTaskConfiguration(logger, project);
+        RemoraPlugins.applyBuildConstants(logger, project);
+
+        applyCheckstyle(logger, project);
+        applyPmd(logger, project);
+        applySpotBugs(logger, project);
+
+        applyManifest(project);
+    }
+
+    public static void applyManifest(@NonNull Project project) {
+        project.getTasks().withType(Jar.class).configureEach(jar -> jar.manifest(manifest -> manifest.attributes(Map.of(
+                "Implementation-Title", project.getName(),
+                "Implementation-Version", project.getVersion(),
+                "Build-Date", Instant.now().toString(),
+                "Remora", "Build with o7studios Remora"
+        ))));
     }
 }
