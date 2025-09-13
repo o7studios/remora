@@ -13,10 +13,6 @@ public interface PluginExtension {
 
     Property<@NotNull ApiVersion> getApiVersion();
 
-    Property<@Nullable String> getBootstrapper();
-
-    Property<@Nullable String> getLoader();
-
     Property<@Nullable Load> getLoad();
 
     ListProperty<@NotNull String> getLibraries();

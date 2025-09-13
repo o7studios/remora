@@ -22,8 +22,6 @@ public final class PluginConfig {
     private final String name;
     private final String main;
     @Default private final String version = "0.0.0";
-    @Default private final String bootstrapper = null;
-    @Default private final String loader = null;
     @Default private final String description = "Build with o7studios Remora";
     @Default private final String website = null;
     @Default private final String apiVersion = ApiVersion.PAPER_1_21_8.getApiVersion();
@@ -41,8 +39,6 @@ public final class PluginConfig {
         data.put("name", name);
         data.put("version", version);
         data.put("main", main);
-        if (bootstrapper != null) data.put("bootstrapper", bootstrapper);
-        if (loader != null) data.put("loader", loader);
         if (description != null) data.put("description", description);
         if (website != null) data.put("website", website);
         if (apiVersion != null) data.put("api-version", apiVersion);

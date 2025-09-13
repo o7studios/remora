@@ -78,17 +78,6 @@ public class PaperPlugins {
 
         builder.main(pluginMain);
 
-
-        // Set bootstrapper
-        var pluginBootstrapper = extension.getBootstrapper().orElse("").get();
-        if (!pluginBootstrapper.isBlank()) builder.bootstrapper(pluginBootstrapper);
-
-
-        // Set loader
-        var pluginLoader = extension.getLoader().orElse("").get();
-        if (!pluginLoader.isBlank()) builder.loader(pluginLoader);
-
-
         // Set load
         var load = extension.getLoad().orElse(Load.POST_WORLD).get();
         builder.load(load.name().replace("_", ""));
@@ -123,7 +112,7 @@ public class PaperPlugins {
         var generateYaml = project.getTasks().register("generatePaperPluginYaml", task -> {
             task.getInputs().property("pluginConfig", hash);
 
-            var outputFile = outputDir.map(dir -> new File(dir.getAsFile(), "paper-plugin.yml"));
+            var outputFile = outputDir.map(dir -> new File(dir.getAsFile(), "plugin.yml"));
             task.getOutputs().file(outputFile);
 
             task.doLast(_ -> {

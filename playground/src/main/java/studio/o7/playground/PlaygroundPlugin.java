@@ -1,5 +1,6 @@
 package studio.o7.playground;
 
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import lombok.extern.slf4j.Slf4j;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -8,28 +9,10 @@ public class PlaygroundPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if (true)
-            getLogger().info("hey");
+        var set = new ObjectArraySet<>();
 
-        try {
-            getLogger().info("err");
-        } catch (Exception _) {
-            getSLF4JLogger().error("Error");
-        }
+        set.add("test");
 
-        String[] x = {
-                "test",
-                "test"
-        };
-
-        switch ("test") {
-            case "hey" -> {
-                getSLF4JLogger().error("Hey");
-            }
-            case "sdfgfg" -> getSLF4JLogger().error("test");
-            default -> {
-                getSLF4JLogger().error("ho");
-            }
-        }
+        getLogger().info(set.toString());
     }
 }
