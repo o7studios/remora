@@ -7,6 +7,8 @@ import org.jetbrains.annotations.Nullable;
 
 public interface PluginExtension {
 
+    Property<@NotNull Boolean> getEnabled();
+
     Property<@NotNull String> getMain();
 
     Property<@NotNull ApiVersion> getApiVersion();

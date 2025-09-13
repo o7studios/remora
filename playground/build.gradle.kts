@@ -12,6 +12,7 @@ information {
 }
 
 plugin {
+    enabled = true
     main = "studio.o7.playground.PlaygroundPlugin"
     apiVersion = ApiVersion.PAPER_1_21_8
 }

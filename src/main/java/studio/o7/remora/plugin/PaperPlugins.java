@@ -25,6 +25,7 @@ public class PaperPlugins {
     public void configureProject(@NonNull Logger logger, @NonNull Project project) {
         var extension = project.getExtensions().findByType(PluginExtension.class);
         if (extension == null) return;
+        if (!extension.getEnabled().orElse(false).get()) return;
         logger.lifecycle("Configuring paper plugin with `plugin` extension");
         var infoExtension = project.getExtensions().getByType(InformationExtension.class);
 

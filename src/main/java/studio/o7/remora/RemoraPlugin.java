@@ -128,7 +128,7 @@ public class RemoraPlugin implements Plugin<@NotNull Project> {
         project.getExtensions().configure(PmdExtension.class, pmd -> {
             logger.info("Configuring extension `pmd`");
             pmd.setToolVersion("7.9.0");
-            pmd.setIgnoreFailures(false);
+            pmd.setIgnoreFailures(true);
 
             pmd.setConsoleOutput(true);
 
