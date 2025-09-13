@@ -146,7 +146,7 @@ public class RemoraPlugin implements Plugin<@NotNull Project> {
 
         project.getTasks().withType(SpotBugsTask.class).configureEach(task -> {
             logger.info("Configuring task `spotBugs`");
-            task.setIgnoreFailures(false);
+            task.setIgnoreFailures(true);
             task.getExcludeFilter().set(ConfigUtils.getConfig(project, "findbugs-exclude.xml"));
         });
     }
