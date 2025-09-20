@@ -59,7 +59,7 @@ public class PaperPlugins {
         var artifactId = infoExtension.getArtifactId().orElse("").get();
         if (artifactId.isBlank())
             throw new GradleException("Paper plugin requires `artifactId` in Remora extension `information` to be set");
-        builder.name(StringUtils.toPascalCase(artifactId));
+        builder.name(StringUtils.toSnakeCase(artifactId));
 
         var version = project.getVersion().toString();
         if (!version.equals("unspecified")) builder.version(version);

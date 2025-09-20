@@ -17,4 +17,15 @@ public class StringUtils {
         }
         return sb.toString();
     }
+
+    public String toSnakeCase(String input) {
+        if (input == null || input.isEmpty()) return input;
+
+        String regex = "([a-z0-9])([A-Z])";
+        String snake = input
+                .replaceAll(regex, "$1_$2")
+                .replaceAll("[-\\s]", "_");
+
+        return snake.toLowerCase();
+    }
 }
