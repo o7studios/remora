@@ -19,7 +19,7 @@ public class RemoraPlugins {
         project.getTasks().withType(BuildConstantsTask.class).configureEach(task -> {
             var group = String.valueOf(project.getGroup());
             if (!group.isEmpty()) {
-                logger.lifecycle("Setting constants {}", group);
+                logger.info("Setting constants {}", group);
                 task.getClassname().set(group + ".BuildConstants");
             } else {
                 task.getClassname().set(project.getName() + ".BuildConstants");
@@ -36,7 +36,7 @@ public class RemoraPlugins {
     }
 
     public void applyShadowJar(@NonNull Logger logger, @NonNull Project project) {
-        logger.lifecycle("Configuring task `shadowJar`");
+        logger.info("Configuring task `shadowJar`");
 
         var task = project.getTasks().withType(ShadowJar.class);
 

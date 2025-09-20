@@ -18,7 +18,7 @@ import java.util.List;
 public class PaperPlugins {
 
     public static void setupExtension(@NonNull Logger logger, @NonNull ExtensionContainer extensions) throws IllegalArgumentException {
-        logger.lifecycle("Setting up the `plugin` extension");
+        logger.info("Setting up the `plugin` extension");
         extensions.create("plugin", PluginExtension.class);
     }
 
@@ -26,7 +26,7 @@ public class PaperPlugins {
         var extension = project.getExtensions().findByType(PluginExtension.class);
         if (extension == null) return;
         if (!extension.getEnabled().orElse(false).get()) return;
-        logger.lifecycle("Configuring paper plugin with `plugin` extension");
+        logger.info("Configuring paper plugin with `plugin` extension");
         var infoExtension = project.getExtensions().getByType(InformationExtension.class);
 
         var builder = PluginConfig.builder();
@@ -37,11 +37,11 @@ public class PaperPlugins {
         var apiVersion = extension.getApiVersion().orElse(ApiVersion.DEFAULT).get();
 
         var apiDependency = apiVersion.getApiDependency();
-        logger.lifecycle("Adding paper-api dependency: {}", apiDependency);
+        logger.info("Adding paper-api dependency: {}", apiDependency);
         dependencies.add("compileOnlyApi", apiDependency);
 
         var pluginApiVersion = apiVersion.getApiVersion();
-        logger.lifecycle("Setting api-version: {}", pluginApiVersion);
+        logger.info("Setting api-version: {}", pluginApiVersion);
         builder.apiVersion(pluginApiVersion);
 
 
@@ -50,7 +50,7 @@ public class PaperPlugins {
         builder.libraries(libraries);
 
         for (var library : libraries) {
-            logger.lifecycle("Adding library as dependency: {}", library);
+            logger.info("Adding library as dependency: {}", library);
             dependencies.add("compileOnlyApi", library);
         }
 
@@ -124,7 +124,7 @@ public class PaperPlugins {
                         pluginConfig.writeYaml(fos);
                     }
 
-                    logger.lifecycle("Generated `paper-plugin.yml`");
+                    logger.info("Generated `paper-plugin.yml`");
                 } catch (Exception exception) {
                     throw new GradleException("Failed to generate paper-plugin.yml", exception);
                 }

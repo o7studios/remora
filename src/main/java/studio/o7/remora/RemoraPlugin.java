@@ -18,10 +18,7 @@ import org.gradle.api.artifacts.dsl.RepositoryHandler;
 import org.gradle.api.logging.Logger;
 import org.gradle.api.plugins.ExtensionContainer;
 import org.gradle.api.plugins.JavaLibraryPlugin;
-import org.gradle.api.plugins.quality.CheckstyleExtension;
-import org.gradle.api.plugins.quality.CheckstylePlugin;
-import org.gradle.api.plugins.quality.PmdExtension;
-import org.gradle.api.plugins.quality.PmdPlugin;
+import org.gradle.api.plugins.quality.*;
 import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.plugins.signing.SigningExtension;
@@ -172,9 +169,29 @@ public class RemoraPlugin implements Plugin<@NotNull Project> {
 
         RemoraPlugins.applyBuildConstants(logger, project);
 
-        applyCheckstyle(logger, project);
-        applyPmd(logger, project);
-        applySpotBugs(logger, project);
+        if (!isDisabled("checkstyle")) {
+            applyCheckstyle(logger, project);
+        } else {
+            logger.lifecycle("Skipping Checkstyle (disabled via env/property)");
+            project.getTasks().withType(Checkstyle.class)
+                    .configureEach(task -> task.setEnabled(false));
+        }
+
+        if (!isDisabled("pmd")) {
+            applyPmd(logger, project);
+        } else {
+            logger.lifecycle("Skipping PMD (disabled via env/property)");
+            project.getTasks().withType(Pmd.class)
+                    .configureEach(task -> task.setEnabled(false));
+        }
+
+        if (!isDisabled("spotbugs")) {
+            applySpotBugs(logger, project);
+        } else {
+            logger.lifecycle("Skipping SpotBugs (disabled via env/property)");
+            project.getTasks().withType(SpotBugsTask.class)
+                    .configureEach(task -> task.setEnabled(false));
+        }
 
         applyManifest(project);
     }
@@ -186,5 +203,13 @@ public class RemoraPlugin implements Plugin<@NotNull Project> {
                 "Build-Date", Instant.now().toString(),
                 "Remora", "Build with o7studios Remora"
         ))));
+    }
+
+    private static boolean isDisabled(String name) {
+        if ("true".equalsIgnoreCase(System.getProperty("remora.skip-" + name))) {
+            return true;
+        }
+
+        return "true".equalsIgnoreCase(System.getenv("REMORA_SKIP_" + name.toUpperCase()));
     }
 }
