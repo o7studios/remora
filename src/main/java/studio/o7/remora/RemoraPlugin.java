@@ -116,8 +116,10 @@ public class RemoraPlugin implements Plugin<@NotNull Project> {
             logger.info("Configuring extension `checkstyle`");
             checkstyle.setToolVersion("10.20.0");
             checkstyle.setIgnoreFailures(false);
+        });
 
-            checkstyle.setConfigFile(ConfigUtils.getConfig(project, "checkstyle.xml"));
+        project.getTasks().withType(Checkstyle.class, task -> {
+            task.doFirst(_ -> task.setConfigFile(ConfigUtils.getConfig(project, "checkstyle.xml")));
         });
     }
 
@@ -128,12 +130,19 @@ public class RemoraPlugin implements Plugin<@NotNull Project> {
             pmd.setIgnoreFailures(true);
 
             pmd.setConsoleOutput(true);
-
-            pmd.ruleSetFiles(ConfigUtils.getConfig(project, "pmd-ruleset.xml"));
         });
+
+        project.getTasks().withType(Pmd.class, task -> task.doFirst(_ -> {
+            var files = project.files(ConfigUtils.getConfig(project, "pmd-ruleset.xml"));
+            task.setRuleSetFiles(files);
+        }));
     }
 
     public static void applySpotBugs(@NonNull Logger logger, @NonNull Project project) {
+        var generateConfigs = project.getTasks().register("generateSpotbugsExludeConfig", task -> {
+            task.doLast(_ -> ConfigUtils.getConfig(project, "findbugs-exclude.xml"));
+        });
+
         project.getExtensions().configure(SpotBugsExtension.class, spotBugs -> {
             logger.info("Configuring extension `spotBugs`");
             spotBugs.getToolVersion().set("4.9.0");
@@ -142,6 +151,7 @@ public class RemoraPlugin implements Plugin<@NotNull Project> {
         });
 
         project.getTasks().withType(SpotBugsTask.class).configureEach(task -> {
+            task.dependsOn(generateConfigs);
             logger.info("Configuring task `spotBugs`");
             task.setIgnoreFailures(true);
             task.getExcludeFilter().set(ConfigUtils.getConfig(project, "findbugs-exclude.xml"));
