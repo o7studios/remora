@@ -114,7 +114,7 @@ public class RemoraPlugin implements Plugin<@NotNull Project> {
     public static void applyCheckstyle(@NonNull Logger logger, @NonNull Project project) {
         project.getExtensions().configure(CheckstyleExtension.class, checkstyle -> {
             logger.info("Configuring extension `checkstyle`");
-            checkstyle.setToolVersion("10.20.0");
+            checkstyle.setToolVersion("12.1.2");
             checkstyle.setIgnoreFailures(false);
         });
 
@@ -126,7 +126,7 @@ public class RemoraPlugin implements Plugin<@NotNull Project> {
     public static void applyPmd(@NonNull Logger logger, @NonNull Project project) {
         project.getExtensions().configure(PmdExtension.class, pmd -> {
             logger.info("Configuring extension `pmd`");
-            pmd.setToolVersion("7.9.0");
+            pmd.setToolVersion("7.18.0");
             pmd.setIgnoreFailures(true);
 
             pmd.setConsoleOutput(true);
@@ -145,7 +145,7 @@ public class RemoraPlugin implements Plugin<@NotNull Project> {
 
         project.getExtensions().configure(SpotBugsExtension.class, spotBugs -> {
             logger.info("Configuring extension `spotBugs`");
-            spotBugs.getToolVersion().set("4.9.0");
+            spotBugs.getToolVersion().set("4.9.8");
             spotBugs.getEffort().set(Effort.MAX);
             spotBugs.getReportLevel().set(Confidence.MEDIUM);
         });
