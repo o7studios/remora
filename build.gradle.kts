@@ -20,7 +20,7 @@ dependencies {
     implementation("com.gradleup.shadow:shadow-gradle-plugin:8.3.8")
     implementation("net.thebugmc.gradle.sonatype-central-portal-publisher:net.thebugmc.gradle.sonatype-central-portal-publisher.gradle.plugin:1.2.4")
     implementation("org.cthing.build-constants:org.cthing.build-constants.gradle.plugin:2.1.0")
-    implementation("com.github.spotbugs:com.github.spotbugs.gradle.plugin:6.2.6")
+    implementation("com.github.spotbugs:com.github.spotbugs.gradle.plugin:6.4.5")
 
     compileOnly(gradleApi())
     testImplementation(gradleTestKit())
