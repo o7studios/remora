@@ -20,7 +20,6 @@ dependencies {
     implementation("com.gradleup.shadow:shadow-gradle-plugin:9.2.2")
     implementation("net.thebugmc.gradle.sonatype-central-portal-publisher:net.thebugmc.gradle.sonatype-central-portal-publisher.gradle.plugin:1.2.4")
     implementation("org.cthing.build-constants:org.cthing.build-constants.gradle.plugin:2.1.0")
-    implementation("com.github.spotbugs:com.github.spotbugs.gradle.plugin:6.4.5")
 
     compileOnly(gradleApi())
     testImplementation(gradleTestKit())
@@ -64,5 +63,5 @@ publishing {
 java {
     withSourcesJar()
     withJavadocJar()
-    toolchain.languageVersion.set(JavaLanguageVersion.of(23))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
 }
